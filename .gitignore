@@ -234,3 +234,9 @@ _Pvt_Extensions
 # log file
 
 klog.csv
+klog.ods
+klog.ots
+klog.xlsx
+klog.xls
+klog.txt
+klog_full.txt

