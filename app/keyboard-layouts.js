@@ -1375,8 +1375,8 @@ app.LAYOUTS = {
         161: [735, 278],    // r_shift
         162: [90, 335],     // l_control
         163: [90, 335],     // r_control // warning same as left control
-        164: [145, 335],    // l_alt
-        165: [605, 335],    // r_alt
+        37: [145, 335],    // l_alt
+        39: [605, 335],    // r_alt
         27: [35, 70],      // escape
         112: [92, 70],            // F1 key
         113: [149, 70],            // F2 key
