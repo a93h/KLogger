@@ -12,7 +12,7 @@
 ### Notes on Heat Map Generator
 
  * launch the app/index.html in Firefox browser
- * input the klog.txt per app or klog_full.txt
+ * input (easily via copy/paste) the klog.txt per app or klog_full.txt
  * https://docs.microsoft.com/en-us/windows/win32/inputdev/virtual-key-codes
  * ^ values are decimal form of these windows hexidecimal virtual key codes
 
